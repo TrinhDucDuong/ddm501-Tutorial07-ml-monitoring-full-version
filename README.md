@@ -104,6 +104,12 @@ Trong Airflow UI, trigger `model_retrain` với config:
 
 Accuracy không thể vượt 1.01: `quality_gate` phải đỏ, version không được promote, bot nhận `[AIRFLOW] Task failed`. Đây là lần chạy thất bại có chủ đích để kiểm thử alert.
 
+Hoặc dùng lệnh tương thích PowerShell/Bash:
+
+```powershell
+python scripts/trigger_dag.py model_retrain --min-accuracy 1.01 --reason "intentional failure alert test"
+```
+
 ### 4. Prometheus → Alertmanager → Telegram
 
 ```powershell

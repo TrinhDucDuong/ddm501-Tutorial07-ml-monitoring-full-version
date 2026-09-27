@@ -1,5 +1,10 @@
 name: Tutorial07 CI
-on: [push, pull_request, workflow_dispatch]
+on:
+  push:
+    paths-ignore: ['docs/**', 'README.md']
+  pull_request:
+    paths-ignore: ['docs/**', 'README.md']
+  workflow_dispatch:
 permissions:
   contents: read
 jobs:
