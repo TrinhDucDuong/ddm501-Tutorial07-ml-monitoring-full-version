@@ -3,7 +3,7 @@
 FROM golang:1.24-bookworm AS builder
 WORKDIR /src
 RUN git clone --depth 1 --branch RELEASE.2025-09-07T16-13-09Z https://github.com/minio/minio.git .
-RUN GOMAXPROCS=2 CGO_ENABLED=0 go build -p 2 -trimpath -o /out/minio .
+RUN GOMAXPROCS=2 GOMEMLIMIT=1500MiB CGO_ENABLED=0 go build -p 2 -trimpath -o /out/minio .
 
 FROM debian:bookworm-slim
 RUN apt-get update && apt-get install -y --no-install-recommends ca-certificates curl && rm -rf /var/lib/apt/lists/*

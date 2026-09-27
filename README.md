@@ -123,6 +123,10 @@ Chụp ngày 27/09/2026 từ bot **DDM501-Tutorial07**. Token và chat ID không
 
 ![APIDown firing và health check thất bại](docs/evidence/telegram-prometheus-firing.png)
 
+### Drift, retrain và phục hồi API
+
+![Drift, model v2 promoted và APIDown resolved](docs/evidence/telegram-recovery.png)
+
 ## Các sửa lỗi so với bản ban đầu
 
 - API dùng đúng MLflow cổng nội bộ `5000`; đồng bộ MLflow 2.17.2.

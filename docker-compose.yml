@@ -22,6 +22,7 @@ services:
       retries: 5
     networks:
     - monitoring
+    restart: unless-stopped
   minio:
     image: ddm501-tutorial07-minio:2025-09-07
     container_name: tutorial07-minio
@@ -46,6 +47,7 @@ services:
     networks:
     - monitoring
     build: ./minio
+    restart: unless-stopped
   minio-init:
     container_name: tutorial07-minio-init
     depends_on:
@@ -94,6 +96,7 @@ services:
       start_period: 40s
     networks:
     - monitoring
+    restart: unless-stopped
   api:
     build:
       context: ./api
@@ -201,6 +204,7 @@ services:
     - ./config/statsd_mapping.yml:/etc/statsd_mapping.yml:ro
     networks:
     - monitoring
+    restart: unless-stopped
   airflow-init:
     build: &id001
       context: ./airflow
@@ -242,6 +246,10 @@ services:
       POSTGRES_PASSWORD: mlflow
       POSTGRES_DB: mlflow
       AIRFLOW_DB_NAME: airflow
+      AIRFLOW__WEBSERVER__WORKERS: '2'
+      AIRFLOW__CORE__PARALLELISM: '4'
+      AIRFLOW__CORE__MAX_ACTIVE_TASKS_PER_DAG: '4'
+      AIRFLOW__SCHEDULER__PARSING_PROCESSES: '1'
     volumes: &id002
     - ./airflow_dags:/opt/airflow/dags
     - ./scripts:/opt/airflow/scripts:ro
@@ -287,6 +295,10 @@ services:
       RETRAIN_MIN_ACCURACY: ${RETRAIN_MIN_ACCURACY:-0.8}
       TELEGRAM_BOT_TOKEN: ${TELEGRAM_BOT_TOKEN:-}
       TELEGRAM_CHAT_ID: ${TELEGRAM_CHAT_ID:-}
+      AIRFLOW__WEBSERVER__WORKERS: '2'
+      AIRFLOW__CORE__PARALLELISM: '4'
+      AIRFLOW__CORE__MAX_ACTIVE_TASKS_PER_DAG: '4'
+      AIRFLOW__SCHEDULER__PARSING_PROCESSES: '1'
     volumes: *id002
     networks: *id003
     container_name: tutorial07-airflow-webserver

@@ -3,6 +3,7 @@ import argparse
 import json
 import os
 import urllib.request
+import numpy as np
 
 from sklearn.datasets import load_wine
 
@@ -22,6 +23,8 @@ def main():
     api = os.getenv("API_URL", "http://api:8000")
     evidently = os.getenv("EVIDENTLY_URL", "http://evidently:8001")
     wine = load_wine()
+    # load_wine is ordered by class; shuffle so the final analysis window is representative.
+    wine.data = wine.data[np.random.default_rng(42).permutation(len(wine.data))]
     reference = [dict(zip(wine.feature_names, row.tolist())) for row in wine.data]
     current = wine.data + 4 * wine.data.std(axis=0) if args.drift else wine.data.copy()
     request(api + "/model/reload", {})
