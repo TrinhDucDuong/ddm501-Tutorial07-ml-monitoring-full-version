@@ -1,0 +1,30 @@
+groups:
+  - name: service_health
+    rules:
+      - alert: APIDown
+        expr: up{job="model-api"} == 0
+        for: 1m
+        labels:
+          severity: critical
+        annotations:
+          summary: Model API is unavailable
+      - alert: AirflowMetricsDown
+        expr: up{job="airflow"} == 0
+        for: 2m
+        labels:
+          severity: critical
+        annotations:
+          summary: Airflow StatsD exporter is unavailable
+      - alert: AirflowSchedulerDown
+        expr: rate(airflow_scheduler_heartbeat_total[2m]) == 0 or absent(airflow_scheduler_heartbeat_total)
+        for: 2m
+        labels:
+          severity: critical
+        annotations:
+          summary: No Airflow scheduler heartbeat metric
+      - alert: AirflowDagFailed
+        expr: increase(airflow_dagrun_duration_failed_seconds_count[15m]) > 0
+        labels:
+          severity: warning
+        annotations:
+          summary: Airflow DAG run failed

@@ -1,0 +1,12 @@
+.venv/
+venv
+__pycache__/
+.env
+mlflow_data
+.DS_Store
+secrets/
+*.pyc
+.pytest_cache/
+.env.*
+!.env.example
+airflow_logs/

@@ -1,0 +1,35 @@
+name: Tutorial07 CI
+on: [push, pull_request, workflow_dispatch]
+permissions:
+  contents: read
+jobs:
+  integration:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+      - name: Validate Compose and Python
+        run: |
+          cp .env.example .env
+          docker compose config --quiet
+          python -m compileall -q api evidently scripts airflow_dags
+      - name: Validate Prometheus rules
+        run: |
+          docker run --rm --entrypoint promtool -v "$PWD/config:/etc/prometheus:ro" prom/prometheus:v3.4.0 check rules /etc/prometheus/prometheus/evidently_alerts.yml /etc/prometheus/prometheus/service_alerts.yml
+      - name: Start model and drift services
+        run: docker compose up -d --build --wait postgres minio mlflow api evidently
+      - name: Train and verify normal / drift data
+        run: |
+          docker compose run --rm trainer
+          docker compose run --rm trainer python /scripts/seed_demo.py --analyze
+          docker compose run --rm trainer python /scripts/seed_demo.py --drift --analyze
+      - name: Validate all three DAGs
+        run: |
+          docker compose build airflow-init
+          docker compose run --rm --no-deps --entrypoint /usr/local/bin/python airflow-init -c "from airflow.models import DagBag; b=DagBag('/opt/airflow/dags', include_examples=False); assert not b.import_errors, b.import_errors; assert set(b.dags)=={'service_health_check','drift_monitoring','model_retrain'}, set(b.dags)"
+      - name: Service logs
+        if: failure()
+        run: docker compose logs --no-color --tail 100
+      - name: Cleanup
+        if: always()
+        run: docker compose down -v
