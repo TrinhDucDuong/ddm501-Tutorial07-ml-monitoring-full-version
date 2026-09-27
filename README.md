@@ -133,6 +133,24 @@ Chụp ngày 27/09/2026 từ bot **DDM501-Tutorial07**. Token và chat ID không
 
 ![Drift, model v2 promoted và APIDown resolved](docs/evidence/telegram-recovery.png)
 
+### Drift 13/13 features và tự động retrain
+
+![Airflow phát hiện drift trên cả 13 features](docs/evidence/telegram-drift-retrain.png)
+
+Run `evidence-shifted-data` phát hiện 13/13 features lệch phân phối và kích hoạt `model_retrain`. Model v6 được promote, API reload thành công sang v6.
+
+### Quality gate chặn model và gửi cảnh báo
+
+![Model v5 bị chặn bởi quality gate, model v6 retrain thành công](docs/evidence/telegram-quality-gate-retrain.png)
+
+Run `evidence-quality-gate-confirmed` dùng `min_accuracy=1.01`: accuracy thực tế 1.0 nên task `quality_gate` thất bại đúng dự kiến, model v5 không được promote. Đây là kiểm thử có chủ đích, không phải lỗi chưa sửa.
+
+### Prometheus gửi cảnh báo drift qua Alertmanager
+
+![DataDriftDetected firing/resolved và AirflowDagFailed resolved trên Telegram](docs/evidence/telegram-prometheus-drift.png)
+
+Sau demo đã nạp lại dữ liệu bình thường: drift 0/13, health check thành công, API phục vụ model v6. Xem [kết quả kiểm chứng và giới hạn kiểm thử](docs/evidence/verification.md).
+
 ## Các sửa lỗi so với bản ban đầu
 
 - API dùng đúng MLflow cổng nội bộ `5000`; đồng bộ MLflow 2.17.2.
@@ -146,6 +164,8 @@ Chụp ngày 27/09/2026 từ bot **DDM501-Tutorial07**. Token và chat ID không
 ## CI và xử lý lỗi
 
 GitHub Actions kiểm tra Compose, cú pháp Python, Prometheus rules, train/register/predict, drift với dữ liệu bình thường và dữ liệu lệch, cùng import đầy đủ 3 DAG. CI không gửi tin Telegram và không cần token.
+
+Bản code `9af85da` đã **PASS** toàn bộ [CI run 36312100585](https://github.com/TrinhDucDuong/ddm501-Tutorial07-ml-monitoring-full-version/actions/runs/36312100585). Commit bổ sung README/evidence sau đó chỉ thay tài liệu và được workflow bỏ qua.
 
 ```powershell
 docker compose ps -a
