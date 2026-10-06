@@ -2,8 +2,6 @@
 
 Ngày kiểm chứng: 27/09/2026 (Asia/Ho_Chi_Minh).
 
-Repo tham chiếu: [thaycacac/ddm501/tutorial07](https://github.com/thaycacac/ddm501/tree/main/tutorial07), commit `b13ae9ce1e24a8c34916a2758c52f31c4618d0cf`.
-
 ## Các luồng đã chạy thực tế
 
 | Kiểm tra | Kết quả quan sát |
@@ -23,7 +21,7 @@ Repo tham chiếu: [thaycacac/ddm501/tutorial07](https://github.com/thaycacac/dd
 | Prometheus targets | airflow, alertmanager, evidently, model-api, prometheus đều up |
 | Docker Compose | 12 service thường trực đang chạy; tất cả service có healthcheck đều healthy |
 
-Các ảnh PNG trong thư mục này chụp trực tiếp cửa sổ Telegram Desktop của bot **DDM501-Tutorial07** (`@mrduovn_bot`). Không chứa token/chat ID và không dùng ảnh từ repo mẫu.
+Các ảnh PNG trong thư mục này chụp trực tiếp cửa sổ Telegram Desktop của bot **DDM501-Tutorial07** (`@mrduovn_bot`). Không chứa token/chat ID.
 
 ## Phạm vi và giới hạn
 

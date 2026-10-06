@@ -2,9 +2,6 @@
 
 [![CI](https://github.com/TrinhDucDuong/ddm501-Tutorial07-ml-monitoring-full-version/actions/workflows/ci.yml/badge.svg)](https://github.com/TrinhDucDuong/ddm501-Tutorial07-ml-monitoring-full-version/actions)
 
-Triển khai theo [thaycacac/ddm501/tutorial07](https://github.com/thaycacac/ddm501/tree/main/tutorial07), đối chiếu commit `b13ae9ce1e24a8c34916a2758c52f31c4618d0cf`.
-Kế thừa cấu trúc 3 DAG, training module, Telegram callback và native Alertmanager receiver của bài mẫu. Các ảnh bên dưới được chụp từ lần chạy của project này, không lấy ảnh của repo mẫu.
-
 ## Kiến trúc
 
 ```mermaid
@@ -52,7 +49,7 @@ docker compose run --rm trainer python /scripts/seed_demo.py --analyze
 docker compose exec airflow-scheduler airflow dags list-import-errors
 ```
 
-Script cấu hình tạo `secrets/telegram_bot_token` để Alertmanager đọc. `.env`, `secrets/` và dữ liệu runtime đều được gitignore. Cần chạy script **trước** `docker compose up` để token file tồn tại. Trên Bash có thể dùng `scripts/test_telegram.sh` theo bài mẫu.
+Script cấu hình tạo `secrets/telegram_bot_token` để Alertmanager đọc. `.env`, `secrets/` và dữ liệu runtime đều được gitignore. Cần chạy script **trước** `docker compose up` để token file tồn tại. Trên Bash có thể dùng `scripts/test_telegram.sh` để kiểm tra gửi tin Telegram.
 
 | Dịch vụ | URL local | Đăng nhập demo |
 |---|---|---|
@@ -67,7 +64,7 @@ Script cấu hình tạo `secrets/telegram_bot_token` để Alertmanager đọc.
 
 Đây là stack thực hành chạy local. Các cổng host chỉ bind `127.0.0.1`; thông tin đăng nhập mặc định chỉ dành cho demo.
 
-## Kiểm thử theo bài mẫu
+## Kiểm thử các luồng hoạt động
 
 ### 1. Retrain thành công
 
@@ -151,7 +148,7 @@ Run `evidence-quality-gate-confirmed` dùng `min_accuracy=1.01`: accuracy thực
 
 Sau demo đã nạp lại dữ liệu bình thường: drift 0/13, health check thành công, API phục vụ model v6. Xem [kết quả kiểm chứng và giới hạn kiểm thử](docs/evidence/verification.md).
 
-## Các sửa lỗi so với bản ban đầu
+## Chi tiết triển khai
 
 - API dùng đúng MLflow cổng nội bộ `5000`; đồng bộ MLflow 2.17.2.
 - Mount đúng Prometheus rules, bật Alertmanager và StatsD mapping; kiểm tra scheduler bằng heartbeat rate.

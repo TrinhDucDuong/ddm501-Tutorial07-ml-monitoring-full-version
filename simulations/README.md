@@ -529,8 +529,6 @@ python scenarios.py
 ## 🔗 Related Documentation
 
 - **Main README**: `../README.md`
-- **Evidently Guide**: `../EVIDENTLY_QUICKSTART.md`
-- **Grafana Dashboard**: `../GRAFANA_DRIFT_DASHBOARD.md`
 - **API Documentation**: http://localhost:8000/docs
 
 ---
@@ -565,4 +563,3 @@ python scenarios.py
 **Version**: 1.0.0  
 **Python**: ≥ 3.10  
 **Dependencies**: See `requirements.txt`
-
